@@ -1,30 +1,20 @@
-import { TypeController } from "../../types/express.types";
-import { errorHandle } from "../../utils/errorResponse";
-import { sendResponse } from "../../utils/sendResponse";
-import { userService } from "./user.service";
 import httpStatus from "http-status";
+import { TypeController } from "../../types/express.types";
+import { catchAsync } from "../../utils/catchAsync";
+import { userService } from "./user.service";
+import { sendResponse } from "../../utils/sendResponse";
 
-const registerUser: TypeController = async (req, res) => {
-    try {
-        const result = await userService.registerUserIntoDB(req.body);
+const registerUser: TypeController = catchAsync(async (req, res, next) => {
+    const result = await userService.registerUserIntoDB(req.body);
 
-        sendResponse(res, {
-            statusCode: httpStatus.CREATED,
-            success: true,
-            message: "User registered successfully",
-            data: result,
-        });
-    } catch (error) {
-        const err = errorHandle(error);
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "User registered successfully",
+        data: result,
+    });
+});
 
-        sendResponse(res, {
-            statusCode: err.statusCode || httpStatus.INTERNAL_SERVER_ERROR,
-            success: false,
-            message: err.message,
-            // error: err,
-        });
-    }
-}
 
 export const userController = {
     registerUser,

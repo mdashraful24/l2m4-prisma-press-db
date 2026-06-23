@@ -1,8 +1,8 @@
-import bcrypt from "bcryptjs";
+import httpStatus from "http-status";
+import { IUser } from "./user.interface"
 import { prisma } from "../../lib/prisma";
 import { SelfError } from "../../utils/errorResponse";
-import { IUser } from "./user.interface"
-import httpStatus from "http-status";
+import bcrypt from "bcryptjs";
 import config from "../../config";
 
 const registerUserIntoDB = async (payload: IUser) => {
@@ -10,7 +10,7 @@ const registerUserIntoDB = async (payload: IUser) => {
 
     const isUserExist = await prisma.user.findUnique({
         where: { email }
-    })
+    });
 
     if (isUserExist) {
         throw new SelfError("User already exists with this email", httpStatus.CONFLICT);
@@ -47,18 +47,15 @@ const registerUserIntoDB = async (payload: IUser) => {
             id: createdUser.id,
             email: createdUser.email || email
         },
-        omit: {
-            password: true
-        },
-        include: {
-            profile: true
-        }
+        omit: { password: true },
+        include: { profile: true }
     });
 
     return user;
-}
+};
+
 
 export const userService = {
     registerUserIntoDB,
 
-}
+};

@@ -1,3 +1,8 @@
+type TErrorHandleType = {
+    message: string;
+    statusCode?: number;
+};
+
 export class SelfError extends Error {
     statusCode: number
 
@@ -5,14 +10,9 @@ export class SelfError extends Error {
         super(message)
         this.statusCode = statusCode
     }
-}
+};
 
-type ErrorHandleType = {
-    message: string
-    statusCode?: number
-}
-
-export const errorHandle = (error: unknown): ErrorHandleType => {
+export const errorHandle = (error: unknown): TErrorHandleType => {
     if (error instanceof SelfError) {
         return {
             message: error.message,
@@ -27,6 +27,6 @@ export const errorHandle = (error: unknown): ErrorHandleType => {
     }
 
     return {
-        message: "Something went wrong",
+        message: "Something went wrong!",
     }
-}
+};

@@ -1,5 +1,11 @@
 import { Response } from 'express';
 
+type TMeta = {
+    page: number;
+    limit: number;
+    total: number;
+}
+
 type IResponse<T, E> = {
     statusCode: number;
     success: boolean;
@@ -7,6 +13,7 @@ type IResponse<T, E> = {
     data?: T;
     error?: E;
     author?: string;
+    meta?: TMeta
 };
 
 export const sendResponse = <T, E>(res: Response, resData: IResponse<T, E>) => {
