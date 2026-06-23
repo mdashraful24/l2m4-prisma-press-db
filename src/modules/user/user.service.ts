@@ -6,7 +6,7 @@ import httpStatus from "http-status";
 import config from "../../config";
 
 const registerUserIntoDB = async (payload: IUser) => {
-    const { name, email, password, profilePhoto, bio } = payload;
+    const { name, email, password, activeStatus, role, profilePhoto, bio } = payload;
 
     const isUserExist = await prisma.user.findUnique({
         where: { email }
@@ -22,17 +22,25 @@ const registerUserIntoDB = async (payload: IUser) => {
         data: {
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            activeStatus,
+            role,
+            profile: {
+                create: {
+                    profilePhoto,
+                    bio
+                }
+            }
         }
     });
 
-    await prisma.profile.create({
-        data: {
-            userId: createdUser.id,
-            profilePhoto,
-            bio
-        }
-    });
+    // await prisma.profile.create({
+    //     data: {
+    //         userId: createdUser.id,
+    //         profilePhoto,
+    //         bio
+    //     }
+    // });
 
     const user = await prisma.user.findUnique({
         where: {
