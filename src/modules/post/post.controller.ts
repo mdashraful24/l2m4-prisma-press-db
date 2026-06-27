@@ -20,6 +20,10 @@ const createPost = catchAsync(async (req, res) => {
 const getPosts = catchAsync(async (req, res) => {
     const result = await postService.getPostsFromDB();
 
+    if (result.length === 0) {
+        throw new SelfError("Post not found", httpStatus.NOT_FOUND);
+    }
+
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -36,6 +40,10 @@ const getMyPosts = catchAsync(async (req, res) => {
     const authorId = req.user?.id;
 
     const result = await postService.getMyPostsFromDB(authorId as string);
+
+    if (result.length === 0) {
+        throw new SelfError("Post not found", httpStatus.NOT_FOUND);
+    }
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -63,11 +71,44 @@ const getSinglePost = catchAsync(async (req, res) => {
 });
 
 const updatePost = catchAsync(async (req, res) => {
+    const postId = req.params.postId as string;
 
+    if (!postId) {
+        throw new SelfError("Post id required in params", httpStatus.BAD_REQUEST);
+    }
+
+    const authorId = req.user?.id as string;
+    const isAdmin = req.user?.role === "ADMIN";
+    const payload = req.body;
+
+    const result = await postService.updatePostIntoDB(postId, authorId, isAdmin, payload);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Post updated successfully",
+        data: result
+    });
 });
 
 const deletePost = catchAsync(async (req, res) => {
+    const postId = req.params.postId as string;
 
+    if (!postId) {
+        throw new SelfError("Post id required in params", httpStatus.BAD_REQUEST);
+    }
+
+    const authorId = req.user?.id as string;
+    const isAdmin = req.user?.role === "ADMIN";
+
+    await postService.deletePostFromDB(postId, authorId, isAdmin);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Post deleted successfully",
+        data: null
+    });
 });
 
 
