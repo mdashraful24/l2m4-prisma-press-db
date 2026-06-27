@@ -39,47 +39,101 @@ const getPostsFromDB = async () => {
 const getPostStatsFromDB = async () => {
     const transactionResult = await prisma.$transaction(
         async (tx) => {
-            const totalPosts = await tx.post.count();
+            // const totalPosts = await tx.post.count();
 
-            const totalPublishedPosts = await tx.post.count({
-                where: {
-                    status: PostStatus.PUBLISHED
-                }
-            });
+            // const totalPublishedPosts = await tx.post.count({
+            //     where: {
+            //         status: PostStatus.PUBLISHED
+            //     }
+            // });
 
-            const totalDraftedPost = await tx.post.count({
-                where: {
-                    status: PostStatus.DRAFT
-                }
-            });
+            // const totalDraftedPost = await tx.post.count({
+            //     where: {
+            //         status: PostStatus.DRAFT
+            //     }
+            // });
 
-            const totalArchivedPosts = await tx.post.count({
-                where: {
-                    status: PostStatus.ARCHIVED
-                }
-            });
+            // const totalArchivedPosts = await tx.post.count({
+            //     where: {
+            //         status: PostStatus.ARCHIVED
+            //     }
+            // });
 
-            const totalComments = await tx.comment.count({});
+            // const totalComments = await tx.comment.count({});
 
-            const totalApprovedComments = await tx.comment.count({
-                where: {
-                    status: CommentStatus.APPROVED
-                }
-            });
+            // const totalApprovedComments = await tx.comment.count({
+            //     where: {
+            //         status: CommentStatus.APPROVED
+            //     }
+            // });
 
-            const totalRejectedComments = await tx.comment.count({
-                where: {
-                    status: CommentStatus.REJECTED
-                }
-            });
+            // const totalRejectedComments = await tx.comment.count({
+            //     where: {
+            //         status: CommentStatus.REJECTED
+            //     }
+            // });
 
-            const countAllPostViews = await tx.post.aggregate({
-                _sum: {
-                    views: true
-                }
-            });
+            // const countAllPostViews = await tx.post.aggregate({
+            //     _sum: {
+            //         views: true
+            //     }
+            // });
 
-            const totalPostViews = countAllPostViews._sum.views;
+            // const totalPostViews = countAllPostViews._sum.views;
+
+            // return {
+            //     totalPosts,
+            //     totalPublishedPosts,
+            //     totalDraftedPost,
+            //     totalArchivedPosts,
+            //     totalComments,
+            //     totalApprovedComments,
+            //     totalRejectedComments,
+            //     totalPostViews
+            // };
+
+            const [totalPosts,
+                totalPublishedPosts,
+                totalDraftedPost,
+                totalArchivedPosts,
+                totalComments,
+                totalApprovedComments,
+                totalRejectedComments,
+                totalPostViewsAggregate
+            ] = await Promise.all([
+                await tx.post.count(),
+                await tx.post.count({
+                    where: {
+                        status: PostStatus.PUBLISHED
+                    }
+                }),
+                await tx.post.count({
+                    where: {
+                        status: PostStatus.DRAFT
+                    }
+                }),
+                await tx.post.count({
+                    where: {
+                        status: PostStatus.ARCHIVED
+                    }
+                }),
+                await tx.comment.count(),
+                await tx.comment.count({
+                    where: {
+                        status: CommentStatus.APPROVED
+                    }
+                }),
+                await tx.comment.count({
+                    where: {
+                        status: CommentStatus.REJECTED
+                    }
+                }),
+                await tx.post.aggregate({
+                    _sum: {
+                        views: true
+                    }
+                })
+            ]);
 
             return {
                 totalPosts,
@@ -89,7 +143,7 @@ const getPostStatsFromDB = async () => {
                 totalComments,
                 totalApprovedComments,
                 totalRejectedComments,
-                totalPostViews
+                totalPostViews: totalPostViewsAggregate._sum.views
             };
         }
     );
