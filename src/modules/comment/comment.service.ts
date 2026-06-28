@@ -18,8 +18,23 @@ const createCommentIntoDB = async (authorId: string, payload: IComment) => {
     return comment;
 };
 
-const getCommentsByAuthorFromDB = async () => {
+const getCommentsByAuthorFromDB = async (authorId: string) => {
+    const comments = await prisma.comment.findMany({
+        where: { authorId },
+        orderBy: {
+            createdAt: "desc"
+        },
+        include: {
+            post: {
+                select: {
+                    id: true,
+                    title: true
+                }
+            }
+        }
+    });
 
+    return comments;
 };
 
 const getSingleCommentFromDB = async () => {
