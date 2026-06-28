@@ -10,3 +10,7 @@ export interface ICommentUpdate {
     content?: string,
     status?: CommentStatus
 }
+
+export interface ICommentStatusModerate {
+    status: CommentStatus
+}

@@ -71,7 +71,16 @@ const deleteComment = catchAsync(async (req, res) => {
 });
 
 const moderateComment = catchAsync(async (req, res) => {
+    const { commentId } = req.params;
 
+    const result = await commentService.moderateCommentIntoDB(commentId as string, req.body);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Comment moderated successfully",
+        data: result
+    });
 });
 
 

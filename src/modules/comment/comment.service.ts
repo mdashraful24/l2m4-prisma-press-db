@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import { prisma } from "../../lib/prisma";
 import { SelfError } from "../../utils/errorResponse";
-import { ICommentCreate, ICommentUpdate } from "./comment.interface";
+import { ICommentCreate, ICommentStatusModerate, ICommentUpdate } from "./comment.interface";
 
 const createCommentIntoDB = async (authorId: string, payload: ICommentCreate) => {
     await prisma.post.findUniqueOrThrow({
@@ -89,8 +89,21 @@ const deleteCommentFromDB = async (authorId: string, commentId: string) => {
     return null;
 };
 
-const moderateCommentIntoDB = async () => {
+const moderateCommentIntoDB = async (commentId: string, data: ICommentStatusModerate) => {
+    const findComment = await prisma.comment.findUniqueOrThrow({
+        where: { id: commentId }
+    });
 
+    if (findComment.status === data.status) {
+        throw new SelfError(`Your provided status (${data.status}) is already up to date.`, httpStatus.BAD_REQUEST)
+    }
+
+    const comment = await prisma.comment.update({
+        where: { id: commentId },
+        data
+    });
+
+    return comment;
 };
 
 
