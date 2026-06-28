@@ -77,37 +77,53 @@ const getPostsFromDB = async () => {
 
 
         // * Combining SEARCH (OR operator) and FILTERING (AND operator)
-        where: {
-            AND: [
-                {
-                    // * Searching
-                    OR: [
-                        {
-                            title: {
-                                contains: "Ronald",
-                                mode: "insensitive"
-                            }
-                        },
-                        {
-                            content: {
-                                contains: "Ron",
-                                mode: "insensitive"
-                            }
-                        }
-                    ]
-                },
-                // * Filtering
-                {
-                    title: {
-                        contains: "Ronald"
-                    }
-                },
-                {
-                    content: {
-                        contains: "ronald"
-                    }
-                }
-            ]
+        // where: {
+        //     AND: [
+        //         {
+        //             // * Searching
+        //             OR: [
+        //                 {
+        //                     title: {
+        //                         contains: "Ronald",
+        //                         mode: "insensitive"
+        //                     }
+        //                 },
+        //                 {
+        //                     content: {
+        //                         contains: "Ron",
+        //                         mode: "insensitive"
+        //                     }
+        //                 }
+        //             ]
+        //         },
+        //         // * Filtering
+        //         {
+        //             title: {
+        //                 contains: "Ronald"
+        //             }
+        //         },
+        //         {
+        //             content: {
+        //                 contains: "ronald"
+        //             }
+        //         }
+        //     ]
+        // },
+
+
+        // * Pagination
+        take: 1, // for first page skip is 0
+        skip: 1, // visiting page 2
+        // skip: 2, // visiting page 3
+        // skip: 3, // visiting page 4
+        // * page = 4, limit / take = 1 => skip: (page - 1) * limit => 4
+
+
+        // * Sorting
+        orderBy: {
+            createdAt: "desc",
+            title: "asc",
+            content: "desc"
         },
 
         include: {
