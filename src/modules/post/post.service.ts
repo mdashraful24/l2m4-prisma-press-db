@@ -4,12 +4,25 @@ import { SelfError } from "../../utils/errorResponse";
 import { IPost, IUpdatePostPayload } from "./post.interface";
 import { CommentStatus, PostStatus } from '../../../generated/prisma/enums';
 
+// ! Single Post
 const createPostIntoDB = async (payload: IPost, userId: string) => {
     const post = await prisma.post.create({
         data: {
             ...payload,
             authorId: userId
         }
+    });
+
+    return post;
+};
+
+// ! Multiple Post
+const createMultiplePostDB = async (payload: IPost[], userId: string) => {
+    const post = await prisma.post.createManyAndReturn({
+        data: payload.map(post => ({
+            ...post,
+            authorId: userId
+        }))
     });
 
     return post;
@@ -112,19 +125,19 @@ const getPostsFromDB = async () => {
 
 
         // * Pagination
-        take: 1, // for first page skip is 0
-        skip: 1, // visiting page 2
+        // take: 1, // for first page skip is 0
+        // skip: 1, // visiting page 2
         // skip: 2, // visiting page 3
         // skip: 3, // visiting page 4
         // * page = 4, limit / take = 1 => skip: (page - 1) * limit => 4
 
 
         // * Sorting
-        orderBy: {
-            createdAt: "desc",
-            title: "asc",
-            content: "desc"
-        },
+        // orderBy: {
+        //     createdAt: "desc",
+        //     title: "asc",
+        //     content: "desc"
+        // },
 
         include: {
             author: {
@@ -433,6 +446,7 @@ const deletePostFromDB = async (postId: string, authorId: string, isAdmin: boole
 
 export const postService = {
     createPostIntoDB,
+    createMultiplePostDB,
     getPostsFromDB,
     getPostStatsFromDB,
     getMyPostsFromDB,

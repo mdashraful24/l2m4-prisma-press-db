@@ -4,6 +4,7 @@ import { sendResponse } from "../../utils/sendResponse";
 import { postService } from "./post.service";
 import { SelfError } from '../../utils/errorResponse';
 
+// ! Single Post
 const createPost = catchAsync(async (req, res) => {
     const id = req.user?.id;
 
@@ -16,6 +17,20 @@ const createPost = catchAsync(async (req, res) => {
         data: result
     });
 });
+
+// ! Multiple Post
+const createMultiplePost = catchAsync(async (req, res) => {
+    const id = req.user?.id;
+
+    const result = await postService.createMultiplePostDB(req.body, id as string);
+
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "All Post created successfully",
+        data: result
+    });
+})
 
 const getPosts = catchAsync(async (req, res) => {
     const result = await postService.getPostsFromDB();
@@ -121,6 +136,7 @@ const deletePost = catchAsync(async (req, res) => {
 
 export const postController = {
     createPost,
+    createMultiplePost,
     getPosts,
     getPostStats,
     getMyPosts,

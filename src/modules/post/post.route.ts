@@ -11,6 +11,7 @@ router.get("/stats", authProtected(Role.ADMIN), postController.getPostStats);
 router.get("/my-posts", authProtected(Role.USER, Role.ADMIN), postController.getMyPosts);
 router.get("/:postId", postController.getSinglePost);
 router.post("/", authProtected(Role.USER, Role.ADMIN, Role.AUTHOR), postController.createPost);
+router.post("/multi-post/", authProtected(Role.USER, Role.ADMIN, Role.AUTHOR), postController.createMultiplePost);
 router.patch("/:postId", authProtected(Role.USER, Role.ADMIN, Role.AUTHOR), postController.updatePost);
 router.delete("/:postId", authProtected(Role.USER, Role.ADMIN, Role.AUTHOR), postController.deletePost);
 
