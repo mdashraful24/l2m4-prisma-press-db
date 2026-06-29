@@ -33,7 +33,8 @@ const createMultiplePost = catchAsync(async (req, res) => {
 })
 
 const getPosts = catchAsync(async (req, res) => {
-    const result = await postService.getPostsFromDB();
+    const query = req.query;
+    const result = await postService.getPostsFromDB(query);
 
     if (result.length === 0) {
         throw new SelfError("Post not found", httpStatus.NOT_FOUND);
@@ -42,7 +43,7 @@ const getPosts = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "All post fetched successfully",
+        message: "All post retrieved successfully",
         data: result
     });
 });
