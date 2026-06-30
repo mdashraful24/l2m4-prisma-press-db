@@ -21,3 +21,5 @@ export const catchAsync = (fn: RequestHandler): RequestHandler => {
         }
     };
 };
+
+// RequestHandler --> infer or inferences

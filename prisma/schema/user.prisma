@@ -6,12 +6,12 @@ model User {
   activeStatus ActiveStatus @default(ACTIVE)
   role         Role         @default(USER)
 
-  profile      Profile?
-  loginHistory Login[]
+  profile       Profile?
+  subscriptions Subscription?
 
-  posts         Post[]
-  comments      Comment[]
-  subscriptions Subscription[]
+  posts        Post[]
+  comments     Comment[]
+  loginHistory Login[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

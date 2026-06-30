@@ -22,7 +22,7 @@ const config = {
     },
 
     stripe: {
-        productKey: process.env.STRIPE_PRODUCT_ID!,
+        productId: process.env.STRIPE_PRODUCT_ID!,
         secretKey: process.env.STRIPE_SECRET_KEY!
     }
 };

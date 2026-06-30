@@ -15,7 +15,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     //     // error: process.env.NODE_ENV === 'development' ? err : undefined,
     // });
 
-    // console.log("Error : ", error);
+    console.log("Error : ", error);
 
     let statusCode;
     let errorMessage = error.message || "Internal Server Error";
