@@ -513,7 +513,7 @@ const updatePostIntoDB = async (postId: string, authorId: string, isAdmin: boole
     });
 
     if (!isAdmin && findPost.authorId !== authorId) {
-        throw new SelfError("You are not eligible to update this post");
+        throw new SelfError("You are not eligible to update this post", httpStatus.FORBIDDEN);
     }
 
     const post = await prisma.post.update({
@@ -543,7 +543,7 @@ const deletePostFromDB = async (postId: string, authorId: string, isAdmin: boole
     });
 
     if (!isAdmin && findPost.authorId !== authorId) {
-        throw new SelfError("You are not eligible to delete this post", httpStatus.INTERNAL_SERVER_ERROR);
+        throw new SelfError("You are not eligible to delete this post", httpStatus.FORBIDDEN);
     }
 
     const post = await prisma.post.delete({

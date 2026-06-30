@@ -24,7 +24,7 @@ const authProtected = (...requiredRoles: Role[]) => {
             const verifiedToken = jwtUtils.verifyToken(token, config.jwt.accessSecret);
 
             if (!verifiedToken.success) {
-                throw new SelfError(verifiedToken.error);
+                throw new SelfError(verifiedToken.error, httpStatus.UNAUTHORIZED);
             }
 
             const { id, name, email, role } = verifiedToken.data as JwtPayload;

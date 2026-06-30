@@ -61,7 +61,7 @@ const authRefreshTokenIntoDB = async (refreshToken: string) => {
     const verifiedRefreshToken = jwtUtils.verifyToken(refreshToken, config.jwt.refreshSecret);
 
     if (!verifiedRefreshToken.success) {
-        throw new SelfError(verifiedRefreshToken.error);
+        throw new SelfError("Authentication failed. Please log in again.", httpStatus.UNAUTHORIZED);
     }
 
     const { id } = verifiedRefreshToken.data as JwtPayload;

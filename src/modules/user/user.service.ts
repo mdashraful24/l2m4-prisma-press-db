@@ -8,7 +8,7 @@ import config from "../../config";
 const registerUserIntoDB = async (payload: IUser) => {
     const { name, email, password, activeStatus, role, profilePhoto, bio } = payload;
 
-    const isUserExist = await prisma.user.findUnique({
+    await prisma.user.findUniqueOrThrow({
         where: { email }
     });
 
