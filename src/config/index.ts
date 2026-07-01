@@ -22,7 +22,7 @@ const config = {
     },
 
     stripe: {
-        productId: process.env.STRIPE_PRODUCT_ID!,
+        productId: process.env.STRIPE_PRODUCT_PRICE_ID!,
         secretKey: process.env.STRIPE_SECRET_KEY!,
         webhookSecret: process.env.STRIPE_WEBHOOK_SECRET!
     }

@@ -160,7 +160,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
                 break;
             case "P2030":
                 statusCode = httpStatus.BAD_REQUEST;
-                errorMessage = "Cannot find a fulltext index to use for the search.";
+                errorMessage = "Cannot find a full text index to use for the search.";
                 break;
             case "P2031":
                 statusCode = httpStatus.BAD_REQUEST;
